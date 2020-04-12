@@ -10,7 +10,11 @@ app.use(express.static(__dirname+ '/public'));
 app.use(bodyParser.json());
 
 const dishRouter = require('./routes/dishRouter');
+const promoRouter = require('./routes/promoRouter');
+const leaderRouter = require('./routes/leaderRouter');
 app.use('/dishes',dishRouter);
+app.use('/promotions',promoRouter);
+app.use('/leaders',leaderRouter);
 
 app.use((req, res, next) => {
     //console.log(req.headers);
