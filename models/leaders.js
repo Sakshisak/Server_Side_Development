@@ -29,6 +29,8 @@ var leaderSchema = new Schema({
         type: Boolean,
         default:false      
     }
+}, {
+    timestamps: true
 });
 
 var Leader = mongoose.model('Leader', leaderSchema);
