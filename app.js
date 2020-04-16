@@ -8,6 +8,7 @@ var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 var passport = require('passport');
 var authenticate = require('./authenticate');
+var config = require('./config');
 
 
 var indexRouter = require('./routes/index');
@@ -21,7 +22,7 @@ const Leaders = require('./models/leaders');
 
 var app = express();
 
-const url = 'mongodb://localhost:27017/conFusion';
+const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 connect.then((db) => {
   console.log("Connected correctly to server");
@@ -35,20 +36,23 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 //app.use(cookieParser('12345-67890-09876-54321'));
-app.use(session({
+
+//Sessions no longer required
+/*app.use(session({
   name: 'session-id',
   secret: '12345-67890-09876-54321',
   saveUninitialized: false,
   resave: false,
   store: new FileStore()
-}));
+}));*/
 
 app.use(passport.initialize());
-app.use(passport.session());
-
+//app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+//Every page doesn't require authentication. So we'll add authentication only for some requests in the routes
+/*
 function auth (req, res, next) {
   console.log(req.user);
 
@@ -63,7 +67,7 @@ function auth (req, res, next) {
 }
 
 
-app.use(auth);
+app.use(auth);*/
 
 //After this everything needs to be autherized
 
@@ -77,27 +81,6 @@ app.use('/leaders',leaderRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
-//auth function
-// function auth (req, res, next) {
-//   console.log(req.session);
-
-//   if(!req.session.user) {
-//       var err = new Error('You are not authenticated!');
-//       err.status = 403;
-//       return next(err);
-//   }
-//   else {
-//     if (req.session.user === 'authenticated') {
-//       next();
-//     }
-//     else {
-//       var err = new Error('You are not authenticated!');
-//       err.status = 403;
-//       return next(err);
-//     }
-//   }
-// }
 
 // error handler
 app.use(function(err, req, res, next) {
