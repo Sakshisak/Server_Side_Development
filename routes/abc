@@ -1,0 +1,38 @@
+admin:
+
+
+"firstname" : "admin",
+	"lastname" : "ladlfj",
+	"admin" : true,
+	"username" : "abdgkbakd",
+{
+	"username": "abdgkbakd",
+	"password": "pass"
+}
+
+
+{
+      "name": "Zucchipnnanflanakoda",
+      "image": "images/zucchipakoda.png",
+      "category": "appetizer",
+      "label": "",
+      "price": "1.99",
+      "featured": "false",
+      "description": "Deep fried Zucchini coated with mildly spiced Chickpea flour batter accompanied with a sweet-tangy tamarind sauce"
+}
+
+
+dish_id:
+5e9a2698c80efc1c7cec18b0
+
+5e9a26a7c80efc1c7cec18b1
+
+
+user = normal;
+
+{
+	"username": "normal",
+	"password": "pass"
+}
+
+token:
