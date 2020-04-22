@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+const cors = require('./cors');
 
 const bodyParser = require('body-parser');
 var User = require('../models/user');
@@ -10,7 +11,7 @@ router.use(bodyParser.json());
 
 /* GET users listing. */
 router.route('/')
-.get(authenticate.verifyOrdinaryUser, authenticate.verifyAdmin,
+.get(cors.corsWithOptions, authenticate.verifyOrdinaryUser, authenticate.verifyAdmin,
   (req, res, next) => {
     User.find()
     .then((users) => {
@@ -22,7 +23,7 @@ router.route('/')
   .catch((err) => next(err));
   })
 
-router.post('/signup', (req, res, next) => {
+router.post('/signup', cors.corsWithOptions, (req, res, next) => {
   User.register(new User({username: req.body.username}), 
     req.body.password, (err, user) => {
     if(err) {
@@ -53,7 +54,7 @@ router.post('/signup', (req, res, next) => {
 });
 
 
-router.post('/login', passport.authenticate('local'), (req, res) => {
+router.post('/login',cors.corsWithOptions, passport.authenticate('local'), (req, res) => {
   console.log("req.user",req.user); //token is not contained in user docs
   var token = authenticate.getToken({_id: req.user._id}); //issuing a token when logging in
   res.statusCode = 200;
@@ -61,7 +62,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
   res.json({success: true, token: token, status: 'You are successfully logged in!'});
 });
 
-router.get('/logout', (req, res, next) => {
+router.get('/logout',cors.corsWithOptions, (req, res, next) => {
   req.logout(); //the generated token should become invalid but even after logging out using the token grants updation and deletion privileges
   res.redirect('/');
   // if (req.session) {
