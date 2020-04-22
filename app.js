@@ -22,6 +22,18 @@ const Leaders = require('./models/leaders');
 
 var app = express();
 
+//Our certificate is self signed: Browser shows your connection is not private
+
+// Secure traffic only : redirecting all requests to secure port
+app.all('*', (req, res, next) => {
+  if (req.secure) {
+    return next();
+  }
+  else {
+    res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+  }   //307 is status code : target req resides on a different url
+});
+
 const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 connect.then((db) => {
